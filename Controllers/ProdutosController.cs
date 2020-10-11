@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using APIProdutos.Business;
-using APIProdutos.Models;
+using SSG_API.Business;
+using SSG_API.Models;
+using System.Collections.Generic;
 
-namespace APIProdutos.Controllers
+namespace SSG_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -35,13 +35,13 @@ namespace APIProdutos.Controllers
         }
 
         [HttpPost]
-        public Resultado Post([FromBody]Produto produto)
+        public Resultado Post([FromBody] Produto produto)
         {
             return _service.Incluir(produto);
         }
 
         [HttpPut]
-        public Resultado Put([FromBody]Produto produto)
+        public Resultado Put([FromBody] Produto produto)
         {
             return _service.Atualizar(produto);
         }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace APIProdutos.Models
+namespace SSG_API.Models
 {
     public class Resultado
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using APIProdutos.Models;
+using SSG_API.Models;
 
-namespace APIProdutos.Data
+namespace SSG_API.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

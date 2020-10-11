@@ -1,4 +1,4 @@
-﻿namespace APIProdutos.Security
+﻿namespace SSG_API.Security
 {
     public class Token
     {

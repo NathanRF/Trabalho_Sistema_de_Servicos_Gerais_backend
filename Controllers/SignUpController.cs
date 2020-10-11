@@ -1,23 +1,23 @@
-﻿using APIProdutos.Models;
-using APIProdutos.Security;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SSG_API.Models;
+using SSG_API.Security;
 
-namespace APIProdutos.Controllers
+namespace SSG_API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class SignUpController : ControllerBase
     {
         [AllowAnonymous]
         [HttpPost]
         public object Post(
-            [FromBody]UserModel user,
-            [FromServices]AccessManager accessManager)
+            [FromBody] UserModel user,
+            [FromServices] AccessManager accessManager)
         {
             var result = accessManager.ValidateSignUp(user);
-            return new { 
+            return new
+            {
                 Result = result
             };
         }

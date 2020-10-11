@@ -1,7 +1,7 @@
-﻿using System.Security.Cryptography;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
-namespace APIProdutos.Security
+namespace SSG_API.Security
 {
     public class SigningConfigurations
     {

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using APIProdutos.Security;
-using APIProdutos.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SSG_API.Models;
+using SSG_API.Security;
 
-namespace APIProdutos.Controllers
+namespace SSG_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -12,8 +12,8 @@ namespace APIProdutos.Controllers
         [AllowAnonymous]
         [HttpPost]
         public object Post(
-            [FromBody]UserModel usuario,
-            [FromServices]AccessManager accessManager)
+            [FromBody] UserModel usuario,
+            [FromServices] AccessManager accessManager)
         {
             if (accessManager.ValidateLoginCredentials(usuario))
             {

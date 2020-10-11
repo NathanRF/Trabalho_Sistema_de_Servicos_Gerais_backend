@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace APIProdutos.Models
+﻿namespace SSG_API.Models
 {
     public class ApplicationUserPrestador : ApplicationUser
     {

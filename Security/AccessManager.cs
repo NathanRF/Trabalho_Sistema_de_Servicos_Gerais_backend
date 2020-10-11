@@ -1,15 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using SSG_API.Models;
+using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using APIProdutos.Models;
-using APIProdutos.Security;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace APIProdutos.Security
+namespace SSG_API.Security
 {
     public class AccessManager
     {
@@ -79,7 +77,8 @@ namespace APIProdutos.Security
 
                 if (user.Tipo == "Prestador")
                 {
-                    applicationUser = new ApplicationUserPrestador { 
+                    applicationUser = new ApplicationUserPrestador
+                    {
                         Email = user.UserID,
                         EmailConfirmed = true,
                         UserName = user.UserID,
@@ -91,11 +90,11 @@ namespace APIProdutos.Security
                     };
                     return _userManager.CreateAsync(applicationUser, user.Password)
                         .Result
-                        .Succeeded 
+                        .Succeeded
                         ? "Succeeded"
                         : "Failed";
                 }
-                else if(user.Tipo == "Cliente")
+                else if (user.Tipo == "Cliente")
                 {
                     applicationUser = new ApplicationUserContratante
                     {

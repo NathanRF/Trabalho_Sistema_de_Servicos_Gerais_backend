@@ -1,15 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
-using APIProdutos.Data;
-using APIProdutos.Models;
-using APIProdutos.Security;
-using APIProdutos.Business;
+using SSG_API.Business;
+using SSG_API.Data;
+using SSG_API.Models;
+using SSG_API.Security;
+using SSG_API.Services;
 
 namespace APIProdutos
 {
@@ -64,7 +65,8 @@ namespace APIProdutos
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-            ApplicationDbContext context,
+            ApplicationDbContext appDbContext,
+            CatalogoDbContext catDbContext,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
@@ -76,7 +78,7 @@ namespace APIProdutos
             // Criação de estruturas, usuários e permissões
             // na base do ASP.NET Identity Core (caso ainda não
             // existam)
-            new IdentityInitializer(context, userManager, roleManager)
+            new IdentityInitializer(appDbContext, userManager, roleManager)
                 .Initialize();
 
             app.UseHttpsRedirection();

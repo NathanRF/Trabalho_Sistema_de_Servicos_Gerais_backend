@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using APIProdutos.Security;
+using System;
 
-namespace APIProdutos.Security
+namespace SSG_API.Security
 {
     public static class JwtSecurityExtension
     {

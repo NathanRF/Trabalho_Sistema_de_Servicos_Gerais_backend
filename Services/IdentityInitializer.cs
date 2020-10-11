@@ -1,9 +1,10 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
-using APIProdutos.Data;
-using APIProdutos.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using SSG_API.Data;
+using SSG_API.Models;
+using SSG_API.Security;
+using System;
 
-namespace APIProdutos.Security
+namespace SSG_API.Services
 {
     public class IdentityInitializer
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using APIProdutos.Models;
+using SSG_API.Models;
 
-namespace APIProdutos.Data
+namespace SSG_API.Data
 {
     public class CatalogoDbContext : DbContext
     {

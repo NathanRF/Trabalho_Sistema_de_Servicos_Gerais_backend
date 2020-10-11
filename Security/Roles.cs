@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace APIProdutos.Security
+﻿namespace SSG_API.Security
 {
     public static class Roles
     {

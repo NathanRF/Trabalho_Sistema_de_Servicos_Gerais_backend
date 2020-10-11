@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIProdutos", "APIProdutos.csproj", "{1D9997C1-C4C0-4891-9B89-CE6763F2BD1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSG_API", "SSG_API.csproj", "{1D9997C1-C4C0-4891-9B89-CE6763F2BD1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

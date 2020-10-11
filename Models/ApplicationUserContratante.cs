@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace APIProdutos.Models
+﻿namespace SSG_API.Models
 {
     public class ApplicationUserContratante : ApplicationUser
     {
-        
+
     }
 }
