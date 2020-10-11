@@ -12,7 +12,7 @@ namespace SSG_API.Controllers
         [AllowAnonymous]
         [HttpPost]
         public object Post(
-            [FromBody] UserModel user,
+            [FromBody] SignUpUserModel user,
             [FromServices] AccessManager accessManager)
         {
             var result = accessManager.ValidateSignUp(user);

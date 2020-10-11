@@ -28,7 +28,7 @@ namespace SSG_API.Security
             _tokenConfigurations = tokenConfigurations;
         }
 
-        public bool ValidateLoginCredentials(UserModel user)
+        public bool ValidateLoginCredentials(SignInUserModel user)
         {
             bool credenciaisValidas = false;
             if (user != null && !String.IsNullOrWhiteSpace(user.UserID))
@@ -58,7 +58,7 @@ namespace SSG_API.Security
             return credenciaisValidas;
         }
 
-        public string ValidateSignUp(UserModel user)
+        public string ValidateSignUp(SignUpUserModel user)
         {
             if
             (
@@ -117,7 +117,7 @@ namespace SSG_API.Security
             return "Failed";
         }
 
-        public Token GenerateToken(UserModel user)
+        public Token GenerateToken(SignInUserModel user)
         {
             ClaimsIdentity identity = new ClaimsIdentity(
                 new GenericIdentity(user.UserID, "Login"),

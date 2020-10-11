@@ -12,7 +12,7 @@ namespace SSG_API.Controllers
         [AllowAnonymous]
         [HttpPost]
         public object Post(
-            [FromBody] UserModel usuario,
+            [FromBody] SignInUserModel usuario,
             [FromServices] AccessManager accessManager)
         {
             if (accessManager.ValidateLoginCredentials(usuario))

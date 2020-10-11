@@ -1,6 +1,6 @@
 ﻿namespace SSG_API.Models
 {
-    public class UserModel
+    public class SignUpUserModel
     {
         public string UserID { get; set; }
         public string Password { get; set; }
