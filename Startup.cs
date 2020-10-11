@@ -62,6 +62,10 @@ namespace APIProdutos
 
             services.AddCors();
             services.AddControllers();
+            services.AddSwaggerGen((options)=>{
+                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "SSG API", Version = "v1" });
+            }
+            );
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
@@ -73,6 +77,12 @@ namespace APIProdutos
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SSG API V1");
+                });
             }
 
             // Criação de estruturas, usuários e permissões
