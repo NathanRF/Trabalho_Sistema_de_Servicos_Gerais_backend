@@ -6,11 +6,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using SSG_API.Business;
 using SSG_API.Data;
 using SSG_API.Models;
 using SSG_API.Security;
 using SSG_API.Services;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace APIProdutos
 {
@@ -62,10 +67,33 @@ namespace APIProdutos
 
             services.AddCors();
             services.AddControllers();
-            services.AddSwaggerGen((options)=>{
+            services.AddSwaggerGen((options) =>
+            {
                 options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "SSG API", Version = "v1" });
-            }
-            );
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
@@ -74,10 +102,17 @@ namespace APIProdutos
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                
+
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
