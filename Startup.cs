@@ -27,10 +27,10 @@ namespace APIProdutos
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Configurando o acesso a dados de produtos
             services.AddDbContext<CatalogoDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<ProdutoService>();
+            services.AddScoped<PrestadorService>();
 
             // Configurando o uso da classe de contexto para
             // acesso às tabelas do ASP.NET Identity Core

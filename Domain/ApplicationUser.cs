@@ -31,5 +31,19 @@ namespace SSG_API.Domain
             get => _linkFoto;
             set => _linkFoto = value?.Trim();
         }
+
+        private string _cpf;
+        public string Cpf
+        {
+            get => _cpf;
+            set => _cpf = value?.Trim();
+        }
+
+        private double _avaliacao;
+        public double Avaliacao
+        {
+            get => _avaliacao;
+            set => _avaliacao = value;
+        }
     }
 }

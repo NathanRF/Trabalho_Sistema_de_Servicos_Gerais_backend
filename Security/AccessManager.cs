@@ -143,6 +143,7 @@ namespace SSG_API.Security
                 Expires = dataExpiracao
             });
             var token = handler.WriteToken(securityToken);
+            
 
             return new Token()
             {
@@ -151,7 +152,6 @@ namespace SSG_API.Security
                 Expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
                 AccessToken = token,
                 Message = "OK",
-                UserName = _userManager.GetUserAsync(claims).Result.NomeCompleto,
                 Roles = _userManager.GetRolesAsync(_userManager.FindByNameAsync(user.UserID).Result).Result.ToArray<String>()
             };
         }

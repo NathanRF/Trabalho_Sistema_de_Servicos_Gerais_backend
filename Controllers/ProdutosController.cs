@@ -36,19 +36,19 @@ namespace SSG_API.Controllers
         }
 
         [HttpPost]
-        public Resultado Post([FromBody] Produto produto)
+        public ActionResult<Resultado> Post([FromBody] Produto produto)
         {
             return _service.Incluir(produto);
         }
 
         [HttpPut]
-        public Resultado Put([FromBody] Produto produto)
+        public ActionResult<Resultado> Put([FromBody] Produto produto)
         {
             return _service.Atualizar(produto);
         }
 
         [HttpDelete("{codigoBarras}")]
-        public Resultado Delete(string codigoBarras)
+        public ActionResult<Resultado> Delete(string codigoBarras)
         {
             return _service.Excluir(codigoBarras);
         }

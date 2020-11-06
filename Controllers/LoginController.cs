@@ -19,15 +19,15 @@ namespace SSG_API.Controllers
             if (accessManager.ValidateLoginCredentials(usuario))
             {
                 ClaimsPrincipal claims = this.User;
-                return accessManager.GenerateToken(usuario, claims);
+                return Ok(accessManager.GenerateToken(usuario, claims));
             }
             else
             {
-                return new
+                return BadRequest(new
                 {
                     Authenticated = false,
                     Message = "Falha ao autenticar"
-                };
+                });
             }
         }
     }

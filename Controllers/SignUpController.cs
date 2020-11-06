@@ -11,7 +11,7 @@ namespace SSG_API.Controllers
     {
         [AllowAnonymous]
         [HttpPost]
-        public object Post(
+        public ActionResult<object> Post(
             [FromBody] SignUpUserModel user,
             [FromServices] AccessManager accessManager)
         {
