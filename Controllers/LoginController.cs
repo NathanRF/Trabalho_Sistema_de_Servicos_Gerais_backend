@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SSG_API.Models;
 using SSG_API.Security;
@@ -11,13 +12,14 @@ namespace SSG_API.Controllers
     {
         [AllowAnonymous]
         [HttpPost]
-        public object Post(
+        public ActionResult<object> Post(
             [FromBody] SignInUserModel usuario,
             [FromServices] AccessManager accessManager)
         {
             if (accessManager.ValidateLoginCredentials(usuario))
             {
-                return accessManager.GenerateToken(usuario);
+                ClaimsPrincipal claims = this.User;
+                return accessManager.GenerateToken(usuario, claims);
             }
             else
             {

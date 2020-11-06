@@ -9,13 +9,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using SSG_API.Business;
 using SSG_API.Data;
-using SSG_API.Models;
+using SSG_API.Domain;
 using SSG_API.Security;
 using SSG_API.Services;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 
 namespace APIProdutos
 {

@@ -1,5 +1,6 @@
 ﻿using SSG_API.Data;
 using SSG_API.Models;
+using SSG_API.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

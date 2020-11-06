@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace SSG_API.Models
+namespace SSG_API.Domain
 {
     public class OrdemDeServico
     {

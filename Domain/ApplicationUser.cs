@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace SSG_API.Models
+namespace SSG_API.Domain
 {
     public class ApplicationUser : IdentityUser
     {

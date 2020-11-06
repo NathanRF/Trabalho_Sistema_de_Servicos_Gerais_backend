@@ -1,4 +1,4 @@
-﻿namespace SSG_API.Models
+﻿namespace SSG_API.Domain
 {
     public class Produto
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using SSG_API.Models;
+using SSG_API.Domain;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -77,7 +78,7 @@ namespace SSG_API.Security
 
                 if (user.Tipo == "Prestador")
                 {
-                    applicationUser = new ApplicationUserPrestador
+                    applicationUser = new Prestador
                     {
                         Email = user.UserID,
                         EmailConfirmed = true,
@@ -96,7 +97,7 @@ namespace SSG_API.Security
                 }
                 else if (user.Tipo == "Cliente")
                 {
-                    applicationUser = new ApplicationUserContratante
+                    applicationUser = new Contratante
                     {
                         Email = user.UserID,
                         EmailConfirmed = true,
@@ -117,7 +118,7 @@ namespace SSG_API.Security
             return "Failed";
         }
 
-        public Token GenerateToken(SignInUserModel user)
+        public Token GenerateToken(SignInUserModel user, ClaimsPrincipal claims)
         {
             ClaimsIdentity identity = new ClaimsIdentity(
                 new GenericIdentity(user.UserID, "Login"),
@@ -150,6 +151,7 @@ namespace SSG_API.Security
                 Expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
                 AccessToken = token,
                 Message = "OK",
+                UserName = _userManager.GetUserAsync(claims).Result.NomeCompleto,
                 Roles = _userManager.GetRolesAsync(_userManager.FindByNameAsync(user.UserID).Result).Result.ToArray<String>()
             };
         }

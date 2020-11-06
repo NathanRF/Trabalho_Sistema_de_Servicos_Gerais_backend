@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SSG_API.Data;
-using SSG_API.Models;
+using SSG_API.Domain;
 using SSG_API.Security;
 using System;
 

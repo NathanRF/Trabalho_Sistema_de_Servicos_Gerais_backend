@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SSG_API.Business;
 using SSG_API.Models;
+using SSG_API.Domain;
 using System.Collections.Generic;
 
 namespace SSG_API.Controllers

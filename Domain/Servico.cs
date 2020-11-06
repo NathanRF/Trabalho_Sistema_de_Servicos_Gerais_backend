@@ -1,12 +1,16 @@
-﻿namespace SSG_API.Models
+﻿using System;
+
+namespace SSG_API.Domain
 {
     public class Servico
     {
-        private string _categoriaServico;
-        public string CategoriaServico
+        public Guid Id { get; set; }
+
+        private string _nome;
+        public string Nome
         {
-            get => _categoriaServico;
-            set => _categoriaServico = value?.Trim().ToUpper();
+            get => _nome;
+            set => _nome = value?.Trim().ToUpper();
         }
 
         private string _descricaoServico;
@@ -15,5 +19,7 @@
             get => _descricaoServico;
             set => _descricaoServico = value?.Trim();
         }
+
+
     }
 }

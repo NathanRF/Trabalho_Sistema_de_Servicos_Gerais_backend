@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SSG_API.Models
+﻿namespace SSG_API.Domain
 {
     public class LocaisDeAtendimento
     {

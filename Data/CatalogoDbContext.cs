@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SSG_API.Models;
+using SSG_API.Domain;
 
 namespace SSG_API.Data
 {
