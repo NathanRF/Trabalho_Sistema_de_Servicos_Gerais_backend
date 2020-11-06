@@ -5,13 +5,13 @@ using SSG_API.Domain;
 
 namespace SSG_API.Data
 {
-    public class PrestadorDbContext : DbContext
+    public class ContratanteDbContext : DbContext
     {
-        public DbSet<Prestador> Prestadores { get; set; }
+        public DbSet<Contratante> Contratantes { get; set; }
 
-        public void Configure(EntityTypeBuilder<Prestador> builder)
+        public void Configure(EntityTypeBuilder<Contratante> builder)
         {
-            builder.ToTable("Prestador");
+            builder.ToTable("Contratante");
             //builder.HasKey(p => p.UserID);
             builder.HasKey(p => p.Id);
             //builder.Property(p => p.Password);
@@ -20,13 +20,9 @@ namespace SSG_API.Data
             builder.Property(p => p.Endereco);
             builder.Property(p => p.Telefone);
             builder.Property(p => p.LinkFoto);
-            builder.Property(p => p.Biografia);
 
-            //builder.HasMany(p => p.OrdemDeServico);
-            //builder.HasMany(p => p.Servico); // tem que ver se nã mudou pra um
-            //builder.HasMany(p => p.ServicoPrestado);
-            //builder.HasMany(p => p.LocaisDeAtendimento);
-            //builder.HasMany(p => p.Contratante);
+            //builder.HasOne(p => p.PrestadorDeservico);
+            //builder.HasOne(p => p.OrdemDeServico);
         }
     }
 }

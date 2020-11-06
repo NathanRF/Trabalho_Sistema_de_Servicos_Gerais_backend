@@ -1,4 +1,6 @@
-﻿namespace SSG_API.Domain
+﻿using System;
+
+namespace SSG_API.Domain
 {
     public class LocaisDeAtendimento
     {
