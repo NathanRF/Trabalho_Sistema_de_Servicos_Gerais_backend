@@ -11,7 +11,7 @@
         public string Biografia { get; set; }
         public string Tipo { get; set; }
         public string Cpf { get; set; }
-        public string Avaliacao { get; set; }
+        //public string Avaliacao { get; set; }
 
     }
 }

@@ -20,21 +20,21 @@ namespace SSG_API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<object> Get([FromQuery] string email="", [FromQuery] string id="")
+        public ActionResult<object> Get([FromQuery] string email = "", [FromQuery] string id = "", [FromQuery] string userName = "")
         {
             object result = null;
 
             if (id != string.Empty)
                 result = _prestadorService.GetById(id);
-            else 
-                if (email != string.Empty)
-                    result = _prestadorService.GetByEmail(email);
-
+            else if (email != string.Empty)
+                result = _prestadorService.GetByEmail(email);
+            else if (userName != null)
+                result = _prestadorService.GetByUserName(userName);
 
             if (result != null)
                 return Ok(result);
-            
-            return NotFound(new {Message = "Prestador não encontrado"});
+
+            return NotFound();
         }
     }
 }

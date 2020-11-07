@@ -27,13 +27,13 @@ namespace APIProdutos
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<CatalogoDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<ProdutoService>();
             services.AddScoped<PrestadorService>();
+            services.AddScoped<ListarServicosService>();
 
-            // Configurando o uso da classe de contexto para
-            // acesso às tabelas do ASP.NET Identity Core
+
+            services.AddDbContext<IdentityDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -41,7 +41,7 @@ namespace APIProdutos
             // permitir a recuperação de seus objetos via injeção de
             // dependências
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
             // Configurando a dependência para a classe de validação
@@ -94,8 +94,7 @@ namespace APIProdutos
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-            ApplicationDbContext appDbContext,
-            CatalogoDbContext catDbContext,
+            IdentityDbContext appDbContext,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {

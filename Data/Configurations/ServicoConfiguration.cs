@@ -5,16 +5,14 @@ using SSG_API.Domain;
 
 namespace SSG_API.Data
 {
-    public class ServicoDbContext : DbContext
+    public class ServicoConfiguration : IEntityTypeConfiguration<Servico>
     {
-        public DbSet<Servico> Servicos { get; set; }
-
         public void Configure(EntityTypeBuilder<Servico> builder)
         {
             builder.ToTable("Servico");
             builder.HasKey(p => p.Id);
-            builder.Property(p => p.Nome);
-            builder.Property(p => p.DescricaoServico);            
+            builder.HasIndex(p => p.Nome).IsUnique();
+            builder.Property(p => p.DescricaoServico);
         }
     }
 }

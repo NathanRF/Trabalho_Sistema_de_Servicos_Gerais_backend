@@ -7,12 +7,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
+using SSG_API.Data;
 
 namespace SSG_API.Security
 {
     public class AccessManager
     {
         private UserManager<ApplicationUser> _userManager;
+        private ApplicationDbContext _applicationDbContext;
         private SignInManager<ApplicationUser> _signInManager;
         private SigningConfigurations _signingConfigurations;
         private TokenConfigurations _tokenConfigurations;
@@ -21,12 +23,14 @@ namespace SSG_API.Security
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             SigningConfigurations signingConfigurations,
-            TokenConfigurations tokenConfigurations)
+            TokenConfigurations tokenConfigurations,
+            ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _signingConfigurations = signingConfigurations;
             _tokenConfigurations = tokenConfigurations;
+            _applicationDbContext = applicationDbContext;
         }
 
         public bool ValidateLoginCredentials(SignInUserModel user)
@@ -78,26 +82,32 @@ namespace SSG_API.Security
 
                 if (user.Tipo == "Prestador")
                 {
-                    applicationUser = new Prestador
+                    applicationUser = new ApplicationUser
                     {
                         Email = user.UserID,
                         EmailConfirmed = true,
                         UserName = user.UserID,
-                        Biografia = user.Biografia,
+                        //Biografia = user.Biografia,
                         Endereco = user.Endereco,
                         LinkFoto = user.LinkFoto,
                         NomeCompleto = user.NomeCompleto,
                         Telefone = user.Telefone
                     };
-                    return _userManager.CreateAsync(applicationUser, user.Password)
+                    if (_userManager.CreateAsync(applicationUser, user.Password)
                         .Result
-                        .Succeeded
-                        ? "Succeeded"
-                        : "Failed";
+                        .Succeeded)
+                    {
+                        _applicationDbContext.Add<Prestador>(new Prestador { User = _userManager.FindByEmailAsync(user.UserID).Result, Biografia = user.Biografia });
+                        _applicationDbContext.SaveChanges();
+
+                        return "Succeeded";
+                    }
+
+
                 }
                 else if (user.Tipo == "Cliente")
                 {
-                    applicationUser = new Contratante
+                    applicationUser = new ApplicationUser
                     {
                         Email = user.UserID,
                         EmailConfirmed = true,
@@ -107,11 +117,15 @@ namespace SSG_API.Security
                         NomeCompleto = user.NomeCompleto,
                         Telefone = user.Telefone
                     };
-                    return _userManager.CreateAsync(applicationUser, user.Password)
+                    if (_userManager.CreateAsync(applicationUser, user.Password)
                         .Result
-                        .Succeeded
-                        ? "Succeeded"
-                        : "Failed";
+                        .Succeeded)
+                    {
+                        _applicationDbContext.Add<Contratante>(new Contratante { User = _userManager.FindByEmailAsync(user.UserID).Result});
+                        _applicationDbContext.SaveChanges();
+
+                        return "Succeeded";
+                    }
                 }
             }
 
@@ -143,7 +157,7 @@ namespace SSG_API.Security
                 Expires = dataExpiracao
             });
             var token = handler.WriteToken(securityToken);
-            
+
 
             return new Token()
             {

@@ -5,14 +5,13 @@ using SSG_API.Domain;
 
 namespace SSG_API.Data
 {
-    public class OrdemDeServicoDbContext : DbContext
+    public class OrdemDeServicoDbContext : IEntityTypeConfiguration<OrdemDeServico>
     {
-        public DbSet<OrdemDeServico> OrdemDeServicos { get; set; }
-
         public void Configure(EntityTypeBuilder<OrdemDeServico> builder)
         {
             builder.ToTable("OrdemDeServico");
 
+            builder.HasKey(p=>p.Id);
             builder.Property(p => p.DataPrestacao);
             builder.Property(p => p.Preco);
             builder.Property(p => p.Endereco);

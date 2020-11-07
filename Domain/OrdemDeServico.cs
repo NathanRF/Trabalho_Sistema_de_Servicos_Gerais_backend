@@ -5,6 +5,7 @@ namespace SSG_API.Domain
 {
     public class OrdemDeServico
     {
+        public Guid Id { get; set; }
         public Prestador Prestador { get; set; }
         public Contratante Contratante { get; set; }
         public ServicoPrestado ServicoPrestado { get; set; }

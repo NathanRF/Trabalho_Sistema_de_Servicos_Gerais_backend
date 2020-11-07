@@ -4,6 +4,8 @@ namespace SSG_API.Domain
 {
     public class LocaisDeAtendimento
     {
+        public Guid Id { get; set; }
+
         public Prestador Prestador { get; set; }
         private string _estado;
         public string Estado

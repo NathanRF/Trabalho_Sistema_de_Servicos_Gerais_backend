@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Newtonsoft.Json.Bson;
 using SSG_API.Domain;
 
 namespace SSG_API.Data
 {
-    public class ServicoPrestadoDbContext : DbContext
+    public class ServicoPrestadoConfiguration : IEntityTypeConfiguration<ServicoPrestado>
     {
-        public DbSet<ServicoPrestado> servicoPrestados { get; set; }
-
         public void Configure(EntityTypeBuilder<ServicoPrestado> builder)
         {
             builder.ToTable("ServicoPrestado");

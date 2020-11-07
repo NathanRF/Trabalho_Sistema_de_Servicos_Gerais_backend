@@ -1,10 +1,10 @@
-﻿namespace SSG_API.Domain
-{
-    public class Contratante : ApplicationUser
-    {
-        public Contratante() : base()
-        {
+﻿using System;
 
-        }
+namespace SSG_API.Domain
+{
+    public class Contratante
+    {
+        public Guid Id { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }
