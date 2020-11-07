@@ -7,13 +7,15 @@ namespace SSG_API.Data
 {
     public class LocaisDeAtendimentoDbContext : DbContext
     {
-        public DbSet<LocaisDeAtendimentoDbContext> locaisDeAtendimentos { get; set; }
+        public DbSet<LocaisDeAtendimento> locaisDeAtendimentos { get; set; }
 
-        public void Configure(EntityTypeBuilder<LocaisDeAtendimentoDbContext> builder)
+        public void Configure(EntityTypeBuilder<LocaisDeAtendimento> builder)
         {
             builder.ToTable("LocaisDeAtendimento");
-            builder.HasKey(p => p.locaisDeAtendimentos);
-            //builder.HasOne(p => p.PrestadorDeServico);
+            //builder.HasKey(p => p.Prestador);
+            builder.Property(p => p.Estado);
+            builder.Property(p => p.Cidade);
+            builder.HasOne(p => p.Prestador);
         }
     }
 }

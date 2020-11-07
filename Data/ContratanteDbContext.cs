@@ -19,10 +19,10 @@ namespace SSG_API.Data
             builder.Property(p => p.NomeCompleto);
             builder.Property(p => p.Endereco);
             builder.Property(p => p.Telefone);
-            builder.Property(p => p.LinkFoto);
+            builder.Property(p => p.LinkFoto);          
 
             //builder.HasOne(p => p.PrestadorDeservico);
-            //builder.HasOne(p => p.OrdemDeServico);
+            //builder.HasMany(p => p.OrdemDeServico);
         }
     }
 }

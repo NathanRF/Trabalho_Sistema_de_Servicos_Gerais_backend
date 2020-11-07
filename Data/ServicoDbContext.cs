@@ -14,10 +14,7 @@ namespace SSG_API.Data
             builder.ToTable("Servico");
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Nome);
-            builder.Property(p => p.DescricaoServico);
-
-            //builder.HasMany(p => p.PrestadorDeServico);
-            //builder.HasMany(p => p.ServicoPrestado);
+            builder.Property(p => p.DescricaoServico);            
         }
     }
 }

@@ -2,6 +2,9 @@
 {
     public class Contratante : ApplicationUser
     {
+        public Contratante() : base()
+        {
 
+        }
     }
 }

@@ -5,6 +5,10 @@ namespace SSG_API.Domain
 {
     public class OrdemDeServico
     {
+        public Prestador Prestador { get; set; }
+        public Contratante Contratante { get; set; }
+        public ServicoPrestado ServicoPrestado { get; set; }
+
         private DateTime _data;
         public string DataPrestacao
         {
