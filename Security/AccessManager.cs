@@ -8,12 +8,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using SSG_API.Data;
+using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace SSG_API.Security
 {
     public class AccessManager
     {
         private UserManager<ApplicationUser> _userManager;
+        private IdentityDbContext _identityDbContext;
         private ApplicationDbContext _applicationDbContext;
         private SignInManager<ApplicationUser> _signInManager;
         private SigningConfigurations _signingConfigurations;
@@ -24,24 +26,26 @@ namespace SSG_API.Security
             SignInManager<ApplicationUser> signInManager,
             SigningConfigurations signingConfigurations,
             TokenConfigurations tokenConfigurations,
+            IdentityDbContext identityDbContext,
             ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _signingConfigurations = signingConfigurations;
             _tokenConfigurations = tokenConfigurations;
+            _identityDbContext = identityDbContext;
             _applicationDbContext = applicationDbContext;
         }
 
         public bool ValidateLoginCredentials(SignInUserModel user)
         {
             bool credenciaisValidas = false;
-            if (user != null && !String.IsNullOrWhiteSpace(user.UserID))
+            if (user != null && !String.IsNullOrWhiteSpace(user.Email))
             {
                 // Verifica a existência do usuário nas tabelas do
                 // ASP.NET Core Identity
                 var userIdentity = _userManager
-                    .FindByNameAsync(user.UserID).Result;
+                    .FindByNameAsync(user.Email).Result;
                 if (userIdentity != null)
                 {
                     // Efetua o login com base no Id do usuário e sua senha
@@ -68,7 +72,7 @@ namespace SSG_API.Security
             if
             (
                 user != null
-                && !String.IsNullOrWhiteSpace(user.UserID)
+                && !String.IsNullOrWhiteSpace(user.Email)
                 && !String.IsNullOrWhiteSpace(user.Biografia)
                 && !String.IsNullOrWhiteSpace(user.Endereco)
                 && !String.IsNullOrWhiteSpace(user.LinkFoto)
@@ -78,54 +82,60 @@ namespace SSG_API.Security
                 && !String.IsNullOrWhiteSpace(user.Tipo)
             )
             {
-                ApplicationUser applicationUser;
-
-                if (user.Tipo == "Prestador")
-                {
-                    applicationUser = new ApplicationUser
+                var applicationUser =
+                    new ApplicationUser
                     {
-                        Email = user.UserID,
+                        Email = user.Email,
                         EmailConfirmed = true,
-                        UserName = user.UserID,
+                        UserName = user.Email,
                         //Biografia = user.Biografia,
                         Endereco = user.Endereco,
                         LinkFoto = user.LinkFoto,
                         NomeCompleto = user.NomeCompleto,
-                        Telefone = user.Telefone
+                        Telefone = user.Telefone,
                     };
-                    if (_userManager.CreateAsync(applicationUser, user.Password)
-                        .Result
-                        .Succeeded)
-                    {
-                        _applicationDbContext.Add<Prestador>(new Prestador { User = _userManager.FindByEmailAsync(user.UserID).Result, Biografia = user.Biografia });
-                        _applicationDbContext.SaveChanges();
-
-                        return "Succeeded";
-                    }
-
-
-                }
-                else if (user.Tipo == "Cliente")
+                if (_userManager.FindByEmailAsync(user.Email.Trim().ToUpper()).Result == null)
                 {
-                    applicationUser = new ApplicationUser
+                    var creationResult = _userManager.CreateAsync(applicationUser, user.Password).Result;
+                    if (creationResult.Succeeded)
                     {
-                        Email = user.UserID,
-                        EmailConfirmed = true,
-                        UserName = user.UserID,
-                        Endereco = user.Endereco,
-                        LinkFoto = user.LinkFoto,
-                        NomeCompleto = user.NomeCompleto,
-                        Telefone = user.Telefone
-                    };
-                    if (_userManager.CreateAsync(applicationUser, user.Password)
-                        .Result
-                        .Succeeded)
-                    {
-                        _applicationDbContext.Add<Contratante>(new Contratante { User = _userManager.FindByEmailAsync(user.UserID).Result});
-                        _applicationDbContext.SaveChanges();
+                        var createdUser = _userManager.FindByEmailAsync(user.Email).Result;
 
-                        return "Succeeded";
+                        if (user.Tipo == "Prestador")
+                        {
+                            Prestador prestador = new Prestador
+                            {
+                                Biografia = user.Biografia,
+                                User = createdUser,
+                                Id = Guid.NewGuid()
+                            };
+
+                            _userManager.AddToRoleAsync(createdUser, Roles.Prestador);
+
+                            _applicationDbContext.Add<Prestador>(prestador);
+                            _applicationDbContext.SaveChanges();
+
+                            return "Succeeded";
+                        }
+                        else if (user.Tipo == "Cliente")
+                        {
+                            Contratante contratante = new Contratante
+                            {
+                                Id = Guid.NewGuid(),
+                                User = applicationUser
+                            };
+
+                            _identityDbContext.SaveChanges();
+                            _applicationDbContext.Add<Contratante>(contratante);
+                            _applicationDbContext.SaveChanges();
+
+                            return "Succeeded";
+                        }
                     }
+                }
+                else
+                {
+                    return "User already exists";
                 }
             }
 
@@ -135,10 +145,10 @@ namespace SSG_API.Security
         public Token GenerateToken(SignInUserModel user, ClaimsPrincipal claims)
         {
             ClaimsIdentity identity = new ClaimsIdentity(
-                new GenericIdentity(user.UserID, "Login"),
+                new GenericIdentity(user.Email, "Login"),
                 new[] {
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                        new Claim(JwtRegisteredClaimNames.UniqueName, user.UserID)
+                        new Claim(JwtRegisteredClaimNames.UniqueName, user.Email)
                 }
             );
 
@@ -166,7 +176,7 @@ namespace SSG_API.Security
                 Expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
                 AccessToken = token,
                 Message = "OK",
-                Roles = _userManager.GetRolesAsync(_userManager.FindByNameAsync(user.UserID).Result).Result.ToArray<String>()
+                Roles = _userManager.GetRolesAsync(_userManager.FindByNameAsync(user.Email).Result).Result.ToArray<String>()
             };
         }
     }

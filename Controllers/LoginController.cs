@@ -23,7 +23,7 @@ namespace SSG_API.Controllers
             }
             else
             {
-                return BadRequest(new
+                return Unauthorized(new
                 {
                     Authenticated = false,
                     Message = "Falha ao autenticar"
