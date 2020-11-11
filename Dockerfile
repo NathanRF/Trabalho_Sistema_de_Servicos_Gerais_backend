@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /src
 COPY *.sln .
-COPY SSG_API/*.csproj
+COPY SSG_API/*.csproj SSG_API/
 RUN dotnet restore
 COPY . .
 
