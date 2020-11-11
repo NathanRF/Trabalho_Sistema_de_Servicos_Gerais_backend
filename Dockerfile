@@ -1,19 +1,14 @@
-# NuGet restore
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-WORKDIR /src
-COPY *.sln .
-COPY SSG_API/*.csproj SSG_API/
-RUN dotnet restore
-COPY . .
-
-# publish
-FROM build AS publish
-WORKDIR /src/SSG_API
-RUN dotnet publish -c Release -o /src/publish
-
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
+FROM microsoft/dotnet:3.1-sdk
 WORKDIR /app
-COPY --from=publish /src/publish .
+EXPOSE 80
+
+COPY *.csproj ./
+RUN dotnet restore
+
+COPY . ./
+RUN dotnet publish -c Release -o out
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet out/heroku-api-medium.dll
+
 # ENTRYPOINT ["dotnet", "Colors.API.dll"]
 # heroku uses the following
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet SSG_API.dll
