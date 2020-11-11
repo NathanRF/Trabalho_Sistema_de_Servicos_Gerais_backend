@@ -32,10 +32,10 @@ namespace APIProdutos
 
 
             services.AddDbContext<IdentityDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(Configuration.GetConnectionString("SQLite")));
             
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(Configuration.GetConnectionString("SQLite")));
 
             // Ativando a utilização do ASP.NET Identity, a fim de
             // permitir a recuperação de seus objetos via injeção de
