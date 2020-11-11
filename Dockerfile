@@ -7,6 +7,7 @@ RUN dotnet restore
 
 COPY . ./
 RUN dotnet publish -c Release -o out
+RUN dotnet ef database update -c ApplicationDbContext
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet out/SSG_API.dll
 
 # ENTRYPOINT ["dotnet", "Colors.API.dll"]
