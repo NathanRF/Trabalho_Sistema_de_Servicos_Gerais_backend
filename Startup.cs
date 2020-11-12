@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,35 @@ using SSG_API.Domain;
 using SSG_API.Security;
 using SSG_API.Services;
 using System;
+using System.Linq;
 
 namespace APIProdutos
 {
     public class Startup
     {
+        readonly string AllowSpecificOrigins = "_allowSpecificOrigins";
+
+        private string NormalizeAzureInAppConnString(string raw)
+        {
+            string conn = string.Empty;
+            try
+            {
+                var dict =
+                     raw.Split(';')
+                         .Where(kvp => kvp.Contains('='))
+                         .Select(kvp => kvp.Split(new char[] { '=' }, 2))
+                         .ToDictionary(kvp => kvp[0].Trim(), kvp => kvp[1].Trim(), StringComparer.InvariantCultureIgnoreCase);
+                var ds = dict["Data Source"];
+                var dsa = ds.Split(":");
+                conn = $"Server={dsa[0]};Port={dsa[1]};Database={dict["Database"]};Uid={dict["User Id"]};Pwd={dict["Password"]};";
+            }
+            catch
+            {
+                throw new Exception("unexpected connection string: datasource is empty or null");
+            }
+            return conn;
+        }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,10 +57,18 @@ namespace APIProdutos
 
 
             services.AddDbContext<IdentityDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("SQLite")));
-            
+            {
+                //var conn = Configuration.GetConnectionString("localdb");
+                //var conn = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb");
+                options.UseMySql(Configuration.GetConnectionString("MySql"));
+            });
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("SQLite")));
+            {
+                //var conn = Configuration.GetConnectionString("localdb");
+                //var conn = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb");
+                options.UseMySql(Configuration.GetConnectionString("MySql"));
+            });
 
             // Ativando a utilização do ASP.NET Identity, a fim de
             // permitir a recuperação de seus objetos via injeção de
@@ -96,7 +129,8 @@ namespace APIProdutos
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             IdentityDbContext appDbContext,
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext applicationDbContext)
         {
             app.UseCors(builder =>
             {
@@ -121,6 +155,9 @@ namespace APIProdutos
             // existam)
             new IdentityInitializer(appDbContext, userManager, roleManager)
                 .Initialize();
+
+            applicationDbContext.Database.Migrate();
+
 
             app.UseHttpsRedirection();
 

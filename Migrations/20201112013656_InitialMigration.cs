@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SSG_API.Migrations.ApplicationDb
+namespace SSG_API.Migrations
 {
-    public partial class FirstDomainVersion : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -191,6 +191,25 @@ namespace SSG_API.Migrations.ApplicationDb
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Servico",
+                columns: new[] { "Id", "DescricaoServico", "Nome" },
+                values: new object[,]
+                {
+                    { new Guid("ea0704ab-c58c-41cd-ac71-3b59f2e171b2"), "Ótimo pintor, especialista em desenhos e pinturas artísticas.", "PINTOR" },
+                    { new Guid("55f55cda-42fe-4f3e-8753-b1ac0b73b0e0"), "Especialista em encanamentos e no conserto de vazamentos em geral..", "ENCANADOR" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UnidadedeCobranca",
+                columns: new[] { "Id", "Unidade" },
+                values: new object[,]
+                {
+                    { new Guid("62e05296-1513-4105-8b96-06a9494c91f5"), "Unidade" },
+                    { new Guid("e52a72a7-0cf4-4d63-9ff9-1defddadc1a6"), "Dia" },
+                    { new Guid("c789afba-514a-489c-897c-2b3530a9d26b"), "Hora" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Contratante_UserId",
                 table: "Contratante",
@@ -222,6 +241,12 @@ namespace SSG_API.Migrations.ApplicationDb
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Servico_Nome",
+                table: "Servico",
+                column: "Nome",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ServicoPrestado_PrestadorId",
                 table: "ServicoPrestado",
                 column: "PrestadorId");
@@ -235,6 +260,12 @@ namespace SSG_API.Migrations.ApplicationDb
                 name: "IX_ServicoPrestado_UnidadeId",
                 table: "ServicoPrestado",
                 column: "UnidadeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UnidadedeCobranca_Unidade",
+                table: "UnidadedeCobranca",
+                column: "Unidade",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
