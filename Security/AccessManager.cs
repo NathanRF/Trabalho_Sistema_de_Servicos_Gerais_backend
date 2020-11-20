@@ -125,6 +125,8 @@ namespace SSG_API.Security
                                 User = applicationUser
                             };
 
+                            _userManager.AddToRoleAsync(createdUser, Roles.Cliente);
+
                             _identityDbContext.SaveChanges();
                             _applicationDbContext.Add<Contratante>(contratante);
                             _applicationDbContext.SaveChanges();
