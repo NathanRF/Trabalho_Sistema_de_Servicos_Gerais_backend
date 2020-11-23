@@ -142,13 +142,13 @@ namespace APIProdutos
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SSG API V1");
-                });
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SSG API V1");
+            });
 
             // Criação de estruturas, usuários e permissões
             // na base do ASP.NET Identity Core (caso ainda não
