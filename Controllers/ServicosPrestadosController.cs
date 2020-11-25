@@ -27,21 +27,33 @@ namespace SSG_API.Controllers
         {
             var result = _applicationDbContext.ServicosPrestados.ToList<object>();
 
-            if(result.Any())
+            if (result.Any())
                 return Ok(result);
             else
                 return NoContent();
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ServicoPrestado> Get(string id)
+        public ActionResult<ServicoPrestado> Get(Guid id)
         {
-            var result = _applicationDbContext.ServicosPrestados.Find(id);
+            var found = _applicationDbContext.ServicosPrestados.Find(id);
 
-            if(result != null)
+            if (found != null)
+            {
+                var result = new ServicoPrestadoModel()
+                {
+                    Servico = found.Servico.Id,
+                    Prestador = found.Prestador.Id,
+                    Preco = found.Preco,
+                    Unidade = found.Unidade.Id
+                };
+
                 return Ok(result);
-            else
-                return NotFound();
+            }
+
+
+
+            return NotFound();
         }
 
         [HttpPost]
@@ -56,7 +68,7 @@ namespace SSG_API.Controllers
                     Preco = servico.Preco
                 }).Entity;
             _applicationDbContext.SaveChanges();
-            
+
             return Ok(result);
         }
 

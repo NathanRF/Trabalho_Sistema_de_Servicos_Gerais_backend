@@ -33,7 +33,7 @@ namespace SSG_API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<string> Get(Guid id)
         {
             var result = _applicationDbContext.UnidadesDeCobranca.Find(id);
 
