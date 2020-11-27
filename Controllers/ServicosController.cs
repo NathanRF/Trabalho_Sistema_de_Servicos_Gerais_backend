@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SSG_API.Data;
 using SSG_API.Domain;
 using SSG_API.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SSG_API.Controllers
 {

@@ -54,6 +54,7 @@ namespace APIProdutos
         {
             services.AddScoped<PrestadorService>();
             services.AddScoped<ListarServicosService>();
+            services.AddScoped<HistoricoDeServicosService>();
 
 
             services.AddDbContext<IdentityDbContext>(options =>

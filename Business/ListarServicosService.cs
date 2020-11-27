@@ -35,7 +35,8 @@ namespace SSG_API.Business
                 categoriaServico = s.DescricaoServico,
                 cidade = l.Cidade,
                 preco = sp.Preco,
-                biografia = p.Biografia
+                biografia = p.Biografia,
+                prestador = p.Id
             }
             ).ToList<object>();
 
