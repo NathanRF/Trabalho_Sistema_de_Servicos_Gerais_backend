@@ -93,6 +93,7 @@ namespace SSG_API.Security
                         LinkFoto = user.LinkFoto,
                         NomeCompleto = user.NomeCompleto,
                         Telefone = user.Telefone,
+                        Cpf = user.Cpf
                     };
                 if (_userManager.FindByEmailAsync(user.Email.Trim().ToUpper()).Result == null)
                 {
