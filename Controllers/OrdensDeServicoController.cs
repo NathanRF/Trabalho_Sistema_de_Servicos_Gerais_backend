@@ -25,7 +25,23 @@ namespace SSG_API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            var result = _applicationDbContext.OrdensDeServico.ToList<object>();
+            var result = _applicationDbContext.OrdensDeServico.ToList<OrdemDeServico>();
+            var results = new List<object>();
+            foreach (var item in result)
+            {
+                results.Add(new {
+                    Id = item.Id,
+                    Contratante = item.Contratante.Id,
+                    Prestador = item.Prestador.Id,
+                    ServicoPrestado =item.ServicoPrestado.Id,
+                    FormaPagamento = item.FormaPagamento,
+                    DataPrestacao = item.DataPrestacao,
+                    Endereco = item.Endereco,
+                    Preco = item.Preco,
+                    Resumo = item.Resumo,
+                    Status = item.Status
+                    });
+            }
 
             if (result.Any())
                 return Ok(result);
@@ -90,8 +106,20 @@ namespace SSG_API.Controllers
 
 
                 var result = _applicationDbContext.OrdensDeServico.Update(actual).Entity;
+                var response = new {
+                    Id = result.Id,
+                    Contratante = result.Contratante.Id,
+                    Prestador = result.Prestador.Id,
+                    ServicoPrestado =result.ServicoPrestado.Id,
+                    FormaPagamento = result.FormaPagamento,
+                    DataPrestacao = result.DataPrestacao,
+                    Endereco = result.Endereco,
+                    Preco = result.Preco,
+                    Resumo = result.Resumo,
+                    Status = result.Status
+                    };
                 _applicationDbContext.SaveChanges();
-                return Ok(result);
+                return Ok(response);
             }
         }
 
