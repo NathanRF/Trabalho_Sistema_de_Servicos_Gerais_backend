@@ -25,7 +25,7 @@ namespace SSG_API.Controllers
             object result = null;
 
             if (id != string.Empty)
-                result = _prestadorService.GetById(id);
+                result = _prestadorService.GetById(new Guid(id));
             else if (email != string.Empty)
                 result = _prestadorService.GetByEmail(email);
             else if (userName != null)
