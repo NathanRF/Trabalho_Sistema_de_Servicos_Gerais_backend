@@ -44,10 +44,15 @@ namespace SSG_API.Business
                     join sp in _applicationDbContext.ServicosPrestados on p.Id equals sp.Prestador.Id
                     join s in _applicationDbContext.Servicos on sp.Servico.Id equals s.Id
                     join os in _applicationDbContext.OrdensDeServico on p.Id equals os.Prestador.Id
+                    join c in _applicationDbContext.Contratantes on os.Contratante.Id equals c.Id
                     where p.User.Id == user2.Id
                     select new
                     {
-                        Nome = p.User.NomeCompleto,
+                        OrdemDeServico = os.Id,
+                        PrestadorNome = p.User.NomeCompleto,
+                        PrestadorFoto = p.User.LinkFoto,
+                        ContratanteNome = c.User.NomeCompleto,
+                        ContratanteFoto = c.User.LinkFoto,
                         Servico = s.Nome,
                         Regiao = l.Cidade,
                         Preco = sp.Preco,
@@ -66,12 +71,15 @@ namespace SSG_API.Business
                     join p in _applicationDbContext.Prestadores on os.Prestador.Id equals p.Id
                     join l in _applicationDbContext.LocaisDeAtendimento on p.Id equals l.Prestador.Id
                     join sp in _applicationDbContext.ServicosPrestados on p.Id equals sp.Prestador.Id
-                    
                     join s in _applicationDbContext.Servicos on sp.Servico.Id equals s.Id
                     where c.User.Id == user2.Id
                     select new
                     {
-                        Nome = p.User.NomeCompleto,
+                        OrdemDeServico = os.Id,
+                        PrestadorNome = p.User.NomeCompleto,
+                        PrestadorFoto = p.User.LinkFoto,
+                        ContratanteNome = c.User.NomeCompleto,
+                        ContratanteFoto = c.User.LinkFoto,
                         Servico = s.Nome,
                         Regiao = l.Cidade,
                         Preco = sp.Preco,
