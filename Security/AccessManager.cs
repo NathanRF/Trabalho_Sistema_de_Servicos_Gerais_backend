@@ -56,10 +56,12 @@ namespace SSG_API.Security
                     {
                         // Verifica se o usuário em questão possui
                         // a role Acesso-APIProdutos
-                        credenciaisValidas = _userManager.IsInRoleAsync(
-                            userIdentity, Roles.Admin).Result
-                            || _userManager.IsInRoleAsync(userIdentity, Roles.Cliente).Result
-                            || _userManager.IsInRoleAsync(userIdentity, Roles.Prestador).Result;
+                        //credenciaisValidas = _userManager.IsInRoleAsync(
+                        //    userIdentity, Roles.Admin).Result
+                        //    || _userManager.IsInRoleAsync(userIdentity, Roles.Cliente).Result
+                        //    || _userManager.IsInRoleAsync(userIdentity, Roles.Prestador).Result;
+
+                        credenciaisValidas = true;
                     }
                 }
             }

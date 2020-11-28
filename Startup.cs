@@ -53,6 +53,7 @@ namespace APIProdutos
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<PrestadorService>();
+            services.AddScoped<ContratanteService>();
             services.AddScoped<ListarServicosService>();
             services.AddScoped<HistoricoDeServicosService>();
 
