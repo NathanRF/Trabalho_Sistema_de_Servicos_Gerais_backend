@@ -112,7 +112,8 @@ namespace SSG_API.Security
                             };
 
                             _userManager.AddToRoleAsync(createdUser, Roles.Prestador);
-
+                            
+                            _identityDbContext.SaveChanges();
                             _applicationDbContext.Add<Prestador>(prestador);
                             _applicationDbContext.SaveChanges();
 
