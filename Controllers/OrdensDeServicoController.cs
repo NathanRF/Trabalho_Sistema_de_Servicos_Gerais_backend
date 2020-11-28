@@ -48,7 +48,7 @@ namespace SSG_API.Controllers
         public ActionResult<object> Post([FromBody] OrdemDeServicoModel value)
         {
             var result = _applicationDbContext.Add<OrdemDeServico>(
-                new OrdemDeServico() 
+                new OrdemDeServico()
                 {
                     Prestador = _applicationDbContext.Prestadores.Find(value.Prestador),
                     Contratante = _applicationDbContext.Contratantes.Find(value.Contratante),
@@ -68,22 +68,31 @@ namespace SSG_API.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody] OrdemDeServicoModel value)
+        public object Put(Guid id, [FromBody] OrdemDeServicoModel value)
         {
             var actual = _applicationDbContext.OrdensDeServico.Find(id);
-            var updated = new OrdemDeServico
+            if (actual == null)
             {
-                Id = id,
-                Contratante = actual.Contratante,
-                Prestador = actual.Prestador,
-                ServicoPrestado = actual.ServicoPrestado,
-                FormaPagamento = value.FormaPagamento != null ? (int)value.FormaPagamento : actual.FormaPagamento,
-                DataPrestacao = value.Data != null ? (DateTime)value.Data : actual.DataPrestacao,
-                Endereco = value.Endereco != null ? value.Endereco : actual.Endereco,
-                Preco = value.Preco != null ? (double)value.Preco : actual.Preco,
-                Resumo = value.Resumo != null ? value.Resumo : actual.Resumo,
-                Status = value.Status != null ? (int)value.Status : actual.Status
-            };
+                return NotFound();
+            }
+            else
+            {
+                actual.Id = id;
+                actual.Contratante = actual.Contratante;
+                actual.Prestador = actual.Prestador;
+                actual.ServicoPrestado = actual.ServicoPrestado;
+                actual.FormaPagamento = value.FormaPagamento != null ? (int)value.FormaPagamento : actual.FormaPagamento;
+                actual.DataPrestacao = value.Data != null ? (DateTime)value.Data : actual.DataPrestacao;
+                actual.Endereco = value.Endereco != null ? value.Endereco : actual.Endereco;
+                actual.Preco = value.Preco != null ? (double)value.Preco : actual.Preco;
+                actual.Resumo = value.Resumo != null ? value.Resumo : actual.Resumo;
+                actual.Status = value.Status != null ? (int)value.Status : actual.Status;
+
+
+                var result = _applicationDbContext.OrdensDeServico.Update(actual).Entity;
+                _applicationDbContext.SaveChanges();
+                return Ok(result);
+            }
         }
 
         [HttpDelete("{id}")]
