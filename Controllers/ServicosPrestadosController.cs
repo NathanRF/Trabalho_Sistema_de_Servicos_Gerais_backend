@@ -25,10 +25,31 @@ namespace SSG_API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<ServicoPrestado>> Get()
         {
-            var result = _applicationDbContext.ServicosPrestados.ToList<object>();
+            var servicosPrestados = from sp in _applicationDbContext.ServicosPrestados
+                                    select new {
+                                        Servico = sp.Servico.Id,
+                                        Prestador = sp.Prestador.Id,
+                                        Unidade = sp.Unidade.Id,
+                                        Preco = sp.Preco
+                                        };
+            
+            List<object> results = new List<object>();
+            
+            foreach (var item in servicosPrestados)
+            {
+                results.Add(
+                    new ServicoPrestadoModel
+                    {
+                        Servico = item.Servico,
+                        Prestador = item.Prestador,
+                        Unidade = item.Unidade,
+                        Preco = item.Preco
+                    }    
+                );
+            }
 
-            if (result.Any())
-                return Ok(result);
+            if (servicosPrestados.Any())
+                return Ok(results);
             else
                 return NoContent();
         }
