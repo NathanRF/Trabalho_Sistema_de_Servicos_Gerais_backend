@@ -39,29 +39,28 @@ namespace SSG_API.Business
                 if (isPrestador)
                 {
                     return (
-                    from p in _applicationDbContext.Prestadores
-                    join l in _applicationDbContext.LocaisDeAtendimento on p.Id equals l.Prestador.Id
-                    join sp in _applicationDbContext.ServicosPrestados on p.Id equals sp.Prestador.Id
-                    join s in _applicationDbContext.Servicos on sp.Servico.Id equals s.Id
-                    join os in _applicationDbContext.OrdensDeServico on p.Id equals os.Prestador.Id
-                    join c in _applicationDbContext.Contratantes on os.Contratante.Id equals c.Id
-                    where p.User.Id == user2.Id
-                    select new
-                    {
-                        OrdemDeServico = os.Id,
-                        PrestadorNome = p.User.NomeCompleto,
-                        PrestadorFoto = p.User.LinkFoto,
-                        ContratanteNome = c.User.NomeCompleto,
-                        ContratanteFoto = c.User.LinkFoto,
-                        Servico = s.Nome,
-                        Regiao = l.Cidade,
-                        Preco = sp.Preco,
-                        Biografia = p.Biografia,
-                        Data = os.DataPrestacao,
-                        Situacao = os.Status
-                    }
-                );
-
+                        from p in _applicationDbContext.Prestadores
+                        join l in _applicationDbContext.LocaisDeAtendimento on p.Id equals l.Prestador.Id
+                        join sp in _applicationDbContext.ServicosPrestados on p.Id equals sp.Prestador.Id
+                        join s in _applicationDbContext.Servicos on sp.Servico.Id equals s.Id
+                        join os in _applicationDbContext.OrdensDeServico on p.Id equals os.Prestador.Id
+                        join c in _applicationDbContext.Contratantes on os.Contratante.Id equals c.Id
+                        where p.User.Id == user2.Id
+                        select new
+                        {
+                            OrdemDeServico = os.Id,
+                            PrestadorNome = p.User.NomeCompleto,
+                            PrestadorFoto = p.User.LinkFoto,
+                            ContratanteNome = c.User.NomeCompleto,
+                            ContratanteFoto = c.User.LinkFoto,
+                            Servico = s.Nome,
+                            Regiao = l.Cidade,
+                            Preco = sp.Preco,
+                            Biografia = p.Biografia,
+                            Data = os.DataPrestacao,
+                            Situacao = os.Status
+                        }
+                    );
                 }
                 else
                 {

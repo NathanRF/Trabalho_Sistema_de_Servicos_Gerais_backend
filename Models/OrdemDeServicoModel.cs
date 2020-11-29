@@ -8,6 +8,7 @@ namespace SSG_API.Models
 {
     public class OrdemDeServicoModel
     {
+        public Guid? Id { get; set; }
         public Guid Prestador { get; set; }
         public Guid Contratante { get; set; }
         public Guid ServicoPrestado { get; set; }

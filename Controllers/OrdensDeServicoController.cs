@@ -9,8 +9,8 @@ using System.Linq;
 
 namespace SSG_API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     [Authorize("Bearer")]
     public class OrdensDeServicoController : ControllerBase
     {
@@ -29,18 +29,19 @@ namespace SSG_API.Controllers
             var results = new List<object>();
             foreach (var item in result)
             {
-                results.Add(new {
+                results.Add(new
+                {
                     Id = item.Id,
-                    Contratante = item.Contratante.Id,
-                    Prestador = item.Prestador.Id,
-                    ServicoPrestado =item.ServicoPrestado.Id,
+                    Contratante = item.Contratante?.Id,
+                    Prestador = item.Prestador?.Id,
+                    ServicoPrestado = item.ServicoPrestado?.Id,
                     FormaPagamento = item.FormaPagamento,
                     DataPrestacao = item.DataPrestacao,
                     Endereco = item.Endereco,
                     Preco = item.Preco,
                     Resumo = item.Resumo,
                     Status = item.Status
-                    });
+                });
             }
 
             if (result.Any())
@@ -83,17 +84,17 @@ namespace SSG_API.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public object Put(Guid id, [FromBody] OrdemDeServicoModel value)
+        [HttpPut]
+        public object Put([FromBody] OrdemDeServicoModel value)
         {
-            var actual = _applicationDbContext.OrdensDeServico.Find(id);
+            var actual = _applicationDbContext.OrdensDeServico.Find(value?.Id);
             if (actual == null)
             {
                 return NotFound();
             }
             else
             {
-                actual.Id = id;
+                actual.Id = (Guid)value.Id;
                 actual.Contratante = actual.Contratante;
                 actual.Prestador = actual.Prestador;
                 actual.ServicoPrestado = actual.ServicoPrestado;
@@ -105,21 +106,22 @@ namespace SSG_API.Controllers
                 actual.Status = value.Status != null ? (int)value.Status : actual.Status;
 
 
-                var result = _applicationDbContext.OrdensDeServico.Update(actual).Entity;
-                var response = new {
-                    Id = result.Id,
-                    Contratante = result.Contratante.Id,
-                    Prestador = result.Prestador.Id,
-                    ServicoPrestado =result.ServicoPrestado.Id,
-                    FormaPagamento = result.FormaPagamento,
-                    DataPrestacao = result.DataPrestacao,
-                    Endereco = result.Endereco,
-                    Preco = result.Preco,
-                    Resumo = result.Resumo,
-                    Status = result.Status
-                    };
+                //var result = 
+                _applicationDbContext.OrdensDeServico.Update(actual);
+                //var response = new {
+                //    Id = result.Id,
+                //    Contratante = result.Contratante.Id,
+                //    Prestador = result.Prestador.Id,
+                //    ServicoPrestado =result.ServicoPrestado.Id,
+                //    FormaPagamento = result.FormaPagamento,
+                //    DataPrestacao = result.DataPrestacao,
+                //    Endereco = result.Endereco,
+                //    Preco = result.Preco,
+                //    Resumo = result.Resumo,
+                //    Status = result.Status
+                //    };
                 _applicationDbContext.SaveChanges();
-                return Ok(response);
+                return Ok();
             }
         }
 
