@@ -82,6 +82,14 @@ namespace APIProdutos
             // Configurando a dependência para a classe de validação
             // de credenciais e geração de tokens
             services.AddScoped<AccessManager>();
+            
+            services.AddSingleton(
+                new FacebookConfigurations
+                {
+                    AcessToken = Configuration.GetConnectionString("FbAccessToken"),
+                    AppId = Configuration.GetConnectionString("FbAppId")
+                });
+            services.AddScoped<FacebookSignInService>();
 
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
@@ -112,19 +120,19 @@ namespace APIProdutos
                 });
 
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
                 {
-                    new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference
+                        new OpenApiSecurityScheme
                         {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
-                }
-            });
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
         }
 

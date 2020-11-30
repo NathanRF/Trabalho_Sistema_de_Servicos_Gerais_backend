@@ -114,7 +114,7 @@ namespace SSG_API.Security
                             };
 
                             _userManager.AddToRoleAsync(createdUser, Roles.Prestador);
-                            
+
                             _identityDbContext.SaveChanges();
                             _applicationDbContext.Add<Prestador>(prestador);
                             _applicationDbContext.SaveChanges();
@@ -149,6 +149,44 @@ namespace SSG_API.Security
         }
 
         public Token GenerateToken(SignInUserModel user, ClaimsPrincipal claims)
+        {
+            ClaimsIdentity identity = new ClaimsIdentity(
+                new GenericIdentity(user.Email, "Login"),
+                new[] {
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
+                        new Claim(JwtRegisteredClaimNames.UniqueName, user.Email)
+                }
+            );
+
+            DateTime dataCriacao = DateTime.Now;
+            DateTime dataExpiracao = dataCriacao +
+                TimeSpan.FromSeconds(_tokenConfigurations.Seconds);
+
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = _tokenConfigurations.Issuer,
+                Audience = _tokenConfigurations.Audience,
+                SigningCredentials = _signingConfigurations.SigningCredentials,
+                Subject = identity,
+                NotBefore = dataCriacao,
+                Expires = dataExpiracao
+            });
+            var token = handler.WriteToken(securityToken);
+
+
+            return new Token()
+            {
+                Authenticated = true,
+                Created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
+                Expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
+                AccessToken = token,
+                Message = "OK",
+                Roles = _userManager.GetRolesAsync(_userManager.FindByNameAsync(user.Email).Result).Result.ToArray<String>()
+            };
+        }
+
+        public Token GenerateToken(ApplicationUser user)
         {
             ClaimsIdentity identity = new ClaimsIdentity(
                 new GenericIdentity(user.Email, "Login"),

@@ -22,6 +22,7 @@ namespace SSG_API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult<IEnumerable<string>> Get()
         {
             var result = _applicationDbContext.UnidadesDeCobranca.ToList<object>();
@@ -33,6 +34,7 @@ namespace SSG_API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public ActionResult<string> Get(Guid id)
         {
             var result = _applicationDbContext.UnidadesDeCobranca.Find(id);
