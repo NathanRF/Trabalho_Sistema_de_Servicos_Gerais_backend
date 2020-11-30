@@ -19,11 +19,11 @@ namespace SSG_API.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<object> Post([FromBody] FacebookSignInModel accessToken)
+        public async Task<object> Post([FromBody] FacebookSignInModel loginModel)
         {
-            if (accessToken != null && accessToken.AccessToken != null)
+            if (loginModel != null && loginModel.AccessToken != null)
             {
-                return await _facebookSignInService.LogIn(accessToken.AccessToken);
+                return await _facebookSignInService.LogIn(loginModel);
             }
 
             return Unauthorized(new { Message = "Token inválido" });

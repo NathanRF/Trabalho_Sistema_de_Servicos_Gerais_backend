@@ -113,7 +113,7 @@ namespace SSG_API.Security
                                 Id = Guid.NewGuid()
                             };
 
-                            _userManager.AddToRoleAsync(createdUser, Roles.Prestador);
+                            var result = _userManager.AddToRoleAsync(createdUser, Roles.Prestador).Result;
 
                             _identityDbContext.SaveChanges();
                             _applicationDbContext.Add<Prestador>(prestador);
@@ -129,7 +129,7 @@ namespace SSG_API.Security
                                 User = applicationUser
                             };
 
-                            _userManager.AddToRoleAsync(createdUser, Roles.Cliente);
+                            var result = _userManager.AddToRoleAsync(createdUser, Roles.Cliente).Result;
 
                             _identityDbContext.SaveChanges();
                             _applicationDbContext.Add<Contratante>(contratante);

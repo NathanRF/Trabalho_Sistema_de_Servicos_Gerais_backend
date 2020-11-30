@@ -9,6 +9,7 @@ using System;
 using SSG_API.Models;
 using System.Security.Claims;
 using SSG_API.Security;
+using SSG_API.Data;
 
 namespace SSG_API.Business
 {
@@ -18,16 +19,22 @@ namespace SSG_API.Business
         private string _appId;
         private UserManager<ApplicationUser> _userManager;
         private AccessManager _accessManager;
+        private IdentityDbContext _identityDbContext;
+        private ApplicationDbContext _applicationDbContext;
 
         public FacebookSignInService(
             UserManager<ApplicationUser> userManager,
             AccessManager accessManager,
-            FacebookConfigurations facebookConfigurations)
+            FacebookConfigurations facebookConfigurations,
+            IdentityDbContext identityDbContext,
+            ApplicationDbContext applicationDbContext)
         {
             _accessToken = facebookConfigurations.AcessToken;
             _appId = facebookConfigurations.AppId;
             _userManager = userManager;
             _accessManager = accessManager;
+            _identityDbContext = identityDbContext;
+            _applicationDbContext = applicationDbContext;
         }
 
         private async Task<bool> IsValidAccessToken(string inputToken)
@@ -62,9 +69,9 @@ namespace SSG_API.Business
             }
         }
 
-        public async Task<object> LogIn(string userAccessToken)
+        public async Task<object> LogIn(FacebookSignInModel signInModel)
         {
-            var isValidToken = await IsValidAccessToken(userAccessToken);
+            var isValidToken = await IsValidAccessToken(signInModel.AccessToken);
 
             if (!isValidToken)
             {
@@ -75,7 +82,7 @@ namespace SSG_API.Business
                 };
             }
 
-            var userData = await GetUserData(userAccessToken);
+            var userData = await GetUserData(signInModel.AccessToken);
 
             var user = await _userManager.FindByEmailAsync(userData.Email);
 
@@ -87,7 +94,10 @@ namespace SSG_API.Business
                     Email = userData.Email,
                     UserName = userData.Email,
                     NomeCompleto = userData.Name,
-                    LinkFoto = userData.FacebookPicture.Data.Url.AbsoluteUri
+                    LinkFoto = userData.FacebookPicture.Data.Url.AbsoluteUri,
+                    Cpf = signInModel.Cpf,
+                    Endereco = signInModel.Endereco,
+                    Telefone = signInModel.Telefone,
                 };
 
                 var creationResult = await _userManager.CreateAsync(appUser);
@@ -101,17 +111,60 @@ namespace SSG_API.Business
                     };
                 }
 
+
+
+                var createdUser = await _userManager.FindByEmailAsync(appUser.Email);
+
+                if (signInModel.Tipo == "PRESTADOR")
+                {
+                    Prestador prestador = new Prestador
+                    {
+                        Biografia = signInModel.Biografia,
+                        User = createdUser,
+                        Id = Guid.NewGuid()
+                    };
+
+                    await _userManager.AddToRoleAsync(createdUser, Roles.Prestador);
+
+                    _identityDbContext.SaveChanges();
+                    _applicationDbContext.Add<Prestador>(prestador);
+
+                    _applicationDbContext.Add<ServicoPrestado>(
+                        new ServicoPrestado()
+                        {
+                            Servico = _applicationDbContext.Find<Servico>(signInModel.Servico),
+                            Prestador = _applicationDbContext.Find<Prestador>(createdUser),
+                            Unidade = _applicationDbContext.Find<UnidadeDeCobranca>(signInModel.UnidadeDeCobranca),
+                            Preco = signInModel.Preco
+                        }
+                    );
+
+                    _applicationDbContext.SaveChanges();
+
+                    return "Succeeded";
+                }
+                else if (signInModel.Tipo == "CLIENTE")
+                {
+                    Contratante contratante = new Contratante
+                    {
+                        Id = Guid.NewGuid(),
+                        User = createdUser
+                    };
+
+                    await _userManager.AddToRoleAsync(createdUser, Roles.Cliente);
+
+                    _identityDbContext.SaveChanges();
+                    _applicationDbContext.Add<Contratante>(contratante);
+                    _applicationDbContext.SaveChanges();
+
+                    return "Succeeded";
+                }
+
                 return new
                 {
-                    Authenticated = false,
+                    Authenticated = true,
                     Message = "Usuário criado com sucesso",
-                    User = new
-                    {
-                        Id = appUser.Id,
-                        Email = appUser.Email,
-                        NomeCompleto = appUser.NomeCompleto,
-                        LinkFoto = appUser.LinkFoto
-                    }
+                    AccessToken = _accessManager.GenerateToken(user).AccessToken
                 };
             }
 
