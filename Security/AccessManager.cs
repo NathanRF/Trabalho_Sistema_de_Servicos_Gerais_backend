@@ -104,7 +104,7 @@ namespace SSG_API.Security
                     {
                         var createdUser = _userManager.FindByEmailAsync(user.Email).Result;
 
-                        if (user.Tipo == "Prestador")
+                        if (user.Tipo == "PRESTADOR")
                         {
                             Prestador prestador = new Prestador
                             {
@@ -121,7 +121,7 @@ namespace SSG_API.Security
 
                             return "Succeeded";
                         }
-                        else if (user.Tipo == "Cliente")
+                        else if (user.Tipo == "CLIENTE")
                         {
                             Contratante contratante = new Contratante
                             {
