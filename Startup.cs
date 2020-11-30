@@ -20,29 +20,6 @@ namespace APIProdutos
 {
     public class Startup
     {
-        readonly string AllowSpecificOrigins = "_allowSpecificOrigins";
-
-        private string NormalizeAzureInAppConnString(string raw)
-        {
-            string conn = string.Empty;
-            try
-            {
-                var dict =
-                     raw.Split(';')
-                         .Where(kvp => kvp.Contains('='))
-                         .Select(kvp => kvp.Split(new char[] { '=' }, 2))
-                         .ToDictionary(kvp => kvp[0].Trim(), kvp => kvp[1].Trim(), StringComparer.InvariantCultureIgnoreCase);
-                var ds = dict["Data Source"];
-                var dsa = ds.Split(":");
-                conn = $"Server={dsa[0]};Port={dsa[1]};Database={dict["Database"]};Uid={dict["User Id"]};Pwd={dict["Password"]};";
-            }
-            catch
-            {
-                throw new Exception("unexpected connection string: datasource is empty or null");
-            }
-            return conn;
-        }
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -142,12 +119,6 @@ namespace APIProdutos
             RoleManager<IdentityRole> roleManager,
             ApplicationDbContext applicationDbContext)
         {
-            app.UseCors(builder =>
-            {
-                builder.AllowAnyOrigin();
-                builder.AllowAnyMethod();
-                builder.AllowAnyHeader();
-            });
 
             if (env.IsDevelopment())
             {
@@ -174,6 +145,12 @@ namespace APIProdutos
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins("https://lorenaaguilar.github.io");
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+            });
 
             app.UseEndpoints(endpoints =>
             {
