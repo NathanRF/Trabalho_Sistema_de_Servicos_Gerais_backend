@@ -136,7 +136,7 @@ namespace SSG_API.Migrations
 
                     b.Property<DateTime>("DataPrestacao")
                         .HasColumnType("datetime(6)");
-
+                        
                     b.Property<string>("Endereco")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
